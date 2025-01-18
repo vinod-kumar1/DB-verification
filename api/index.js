@@ -67,5 +67,4 @@ app.get("/verifyuser", async (req, res) => {
   }
 });
 
-// module.exports = app;
 export default app;
