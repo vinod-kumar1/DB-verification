@@ -52,7 +52,7 @@ async function searchDb(email, password) {
 }
 
 app.get("/", (req, res) => {
-  res.send("Done");
+  res.status(200).send("Done");
 });
 
 app.get("/verifyuser", async (req, res) => {
@@ -64,7 +64,6 @@ app.get("/verifyuser", async (req, res) => {
 
     if (user) {
       res.status(200).json(user); // Found the user, return the data
-      res.redirect("/home");
     } else {
       res.status(404).json({ message: "Session key is invalid" }); // No user found for the given session key
     }
@@ -85,10 +84,10 @@ app.post("/createuser", async (req, res) => {
   try {
     let hashKey = hash(email, password);
     let user = mongoose.model("lists", userSchema);
-    await new user({ sessionkey: hashKey, email: email }).save();
-    res.status(201).send("New user created");
+    let data = await new user({ sessionkey: hashKey, email: email }).save();
+    res.status(201).send(`Here are your details: ${data}`);
   } catch (err) {
-    res.status(500).send("Please try again, the issue is", err);
+    res.status(500).send("Please try again, the issue is");
   }
 });
 
