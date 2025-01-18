@@ -64,6 +64,7 @@ app.get("/verifyuser", async (req, res) => {
 
     if (user) {
       res.status(200).json(user); // Found the user, return the data
+      res.redirect("/home");
     } else {
       res.status(404).json({ message: "Session key is invalid" }); // No user found for the given session key
     }
@@ -73,7 +74,7 @@ app.get("/verifyuser", async (req, res) => {
   }
 });
 
-app.post("/craeteuser", async (req, res) => {
+app.post("/createuser", async (req, res) => {
   let email = req.headers["email"];
   let password = req.headers["password"];
   await connectDb();
