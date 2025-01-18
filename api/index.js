@@ -73,17 +73,18 @@ app.get("/verifyuser", async (req, res) => {
   }
 });
 
+let userSchema = new mongoose.Schema({
+  sessionkey: { type: String, required: true, unique: true },
+  email: { type: String, required: false, unique: false },
+});
+let user = mongoose.model("lists", userSchema);
+
 app.post("/createuser", async (req, res) => {
   let email = req.headers["email"];
   let password = req.headers["password"];
   await connectDb();
-  let userSchema = new mongoose.Schema({
-    sessionkey: { type: String, required: true, unique: true },
-    email: { type: String, required: false, unique: false },
-  });
   try {
     let hashKey = hash(email, password);
-    let user = mongoose.model("lists", userSchema);
     let data = await new user({ sessionkey: hashKey, email: email }).save();
     res.status(201).send(`Here are your details: ${data}`);
   } catch (err) {
