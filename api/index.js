@@ -15,7 +15,6 @@ app.use(cors());
 let connectionString = `mongodb+srv://${process.env.mongodb_username}:${process.env.mongodb_password}@vinod-cluster.wknk7.mongodb.net/users`;
 
 function hash(email, password) {
-  console.log(email, password);
   return crypto
     .createHmac("sha256", `${email}`)
     .update(`${password}`)
@@ -33,7 +32,6 @@ async function connectDb() {
 
 async function searchDb(email, password) {
   let hashkey = hash(email, password);
-  console.log(hashkey, "hashkey");
   let res = null;
   try {
     // Connect to the MongoDB database
@@ -41,10 +39,8 @@ async function searchDb(email, password) {
 
     // Fetch the document based on the hashed sessionkey
     res = await collection.findOne({ sessionkey: hashkey });
-    console.log("rest", res);
   } catch (err) {
-    console.error("Error connecting to the database or fetching data:", err);
-    throw new Error("Database error");
+    throw new Error("Database error", err);
   } finally {
   }
 
@@ -68,8 +64,7 @@ app.get("/verifyuser", async (req, res) => {
       res.status(404).json({ message: "Session key is invalid" }); // No user found for the given session key
     }
   } catch (err) {
-    console.error("Error processing the request:", err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: `Internal server error : ${err}` });
   }
 });
 
