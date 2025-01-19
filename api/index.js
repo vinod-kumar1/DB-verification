@@ -69,7 +69,17 @@ app.get("/verifyuser", async (req, res) => {
 
 let userSchema = new mongoose.Schema({
   sessionkey: { type: String, required: true, unique: true },
-  email: { type: email, required: false, unique: false },
+  email: {
+    type: String,
+    required: [true, "Email is required"], // Field is mandatory
+    unique: true, // Ensure email is unique
+    trim: true, // Removes leading/trailing whitespace
+    lowercase: true, // Converts email to lowercase
+    match: [
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "Please enter a valid email address",
+    ], // Regular expression for email validation
+  },
 });
 let user = mongoose.model("lists", userSchema);
 
