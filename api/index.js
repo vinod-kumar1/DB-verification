@@ -4,7 +4,6 @@ import crypto from "crypto";
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
-import { type } from "os";
 dotenv.config();
 
 let app = express();
@@ -70,7 +69,7 @@ app.get("/verifyuser", async (req, res) => {
 
 let userSchema = new mongoose.Schema({
   sessionkey: { type: String, required: true, unique: true },
-  email: { type: String, required: false, unique: false },
+  email: { type: email, required: false, unique: false },
 });
 let user = mongoose.model("lists", userSchema);
 
