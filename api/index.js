@@ -92,6 +92,7 @@ app.post("/createuser", async (req, res) => {
     let data = await new user({ sessionkey: hashKey, email: email }).save();
     res.status(201).json(data);
   } catch (err) {
+    console.log(err);
     res.status(500).json(`Please try again, the issue is : ${err}`);
   }
 });
